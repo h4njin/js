@@ -1,6 +1,5 @@
-# rubyStudy
+# js
 
-Repositório com propósito de guardar comandos vitais no Ruby que estou
-praticando pelo Rails na AWS.
+Repositório com sistemas usando js.
 
 
