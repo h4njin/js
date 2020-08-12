@@ -2,8 +2,8 @@ function doGet(e){
 
   var op = e.parameter.action;
 
-  var ss=SpreadsheetApp.openByUrl("Digite aqui a url da sua planilha compartilhada a todos por link");
-  var sheet = ss.getSheetByName("Data"); //edite a primeira guia da planilha para Data.
+  var ss=SpreadsheetApp.openByUrl("https://docs.google.com/spreadsheets/d/197BZ3jHoYmEfb6JDULc4VXx_qVOaH54XVtFCBd7_uWI/edit?usp=sharing"); //adicione aqui a url do google sheets
+  var sheet = ss.getSheetByName("Data");
 
 
   if(op=="insert")
@@ -28,11 +28,13 @@ function doGet(e){
 
 
 
-function insert_value(request,sheet){ //como passar para salvar somente na coluna desejada?
+function insert_value(request,sheet){
 
   var id = request.parameter.id;
   var country = request.parameter.name;
   var nascimento = request.parameter.nascimento;
+
+
 
   //add new row with recieved parameter from client
 
@@ -126,6 +128,7 @@ var output  = ContentService.createTextOutput();
   var flag=0;
   var country = request.parameter.name;
   var nascimento = request.parameter.nascimento;
+  var telefone = request.parameter.telefone;
 
   var lr= sheet.getLastRow();
   for(var i=1;i<=lr;i++){
@@ -133,7 +136,7 @@ var output  = ContentService.createTextOutput();
     if(rid===id){
       sheet.getRange(i,3).setValue(country);
       sheet.getRange(i,4).setValue(nascimento);
-
+      sheet.getRange(i,5).setValue(telefone);
       var result="Dados atualizados com sucesso";
       flag=1;
     }
@@ -156,10 +159,11 @@ var output  = ContentService.createTextOutput();
 function delete_value(request,sheet){
 
   var output  = ContentService.createTextOutput();
-  var id = request.parameter.id;
+   var id = request.parameter.id;
   var country = request.parameter.name;
-  insert_value(id,sheet); //salva a pasta vazia
   var flag=0;
+
+
 
   var lr= sheet.getLastRow();
   for(var i=1;i<=lr;i++){
@@ -177,7 +181,7 @@ function delete_value(request,sheet){
 
 
 
-  result = JSON.stringify({
+   result = JSON.stringify({
     "result": result
   });
 
