@@ -1,0 +1,268 @@
+<!DOCTYPE HTML>
+<html lang="pt-br">
+
+  <head>
+    <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet'>
+    <title>Arquivo Passivo E.E Exemplo  </title>
+    <style>
+      input:invalid {
+        border: 2px dashed red;
+      }
+
+      input:invalid:required {
+        background-image: linear-gradient(to right, white);
+      }
+
+      table {
+        border-collapse: collapse;
+        width: 100%;
+      }
+
+      h1 {
+        color: #02b6ab
+      }
+
+      h2 {
+        color: #8ddad5
+      }
+
+      body {
+        font-family: 'Roboto';
+        font-size: 15px;
+        background-image: linear-gradient(120deg, #fdfbfb 0%, #ebedee 100%);
+      }
+
+      #showData td,
+      #showData th {
+        border: 1px solid #ddd;
+        padding: 3px;
+      }
+
+      #showData tr {
+        background-image: linear-gradient(-20deg, #00cdac 0%, #8ddad5 100%);
+      }
+
+      #showData tr:nth-child(even) {
+        background-image: linear-gradient(-225deg, #E3FDF5 0%, #FFE6FA 100%);
+      }
+
+      #showData tr:hover {
+        background-color: #E4E4E1;
+        background-image: radial-gradient(at top center, rgba(255, 255, 255, 0.03) 0%,
+            rgba(0, 0, 0, 0.03) 100%), linear-gradient(to top, rgba(255, 255, 255, 0.1) 0%,
+            rgba(143, 152, 157, 0.60) 100%);
+        background-blend-mode: normal, multiply;
+      }
+
+      #loader {
+        border: 5px solid #f3f3f3;
+        border-radius: 100%;
+        border-top: 5px solid blue;
+        border-bottom: 5px solid blue;
+        width: 15px;
+        height: 15px;
+        -webkit-animation: spin 2s linear infinite;
+        animation: spin 2s linear infinite;
+        visibility: hidden;
+      }
+
+      @-webkit-keyframes spin {
+        0% {
+          -webkit-transform: rotate(0deg);
+        }
+
+        100% {
+          -webkit-transform: rotate(360deg);
+        }
+      }
+
+      @keyframes spin {
+        0% {
+          transform: rotate(0deg);
+        }
+
+        100% {
+          transform: rotate(360deg);
+        }
+      }
+    </style>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
+    <script>
+      function show(shown, hidden) {
+        document.getElementById(shown).style.display = 'block';
+        document.getElementById(hidden).style.display = 'none';
+        return false;
+      }
+      var script_url = ""; // digite aqui o endereco api publicada para web no google script
+
+      function insert_value(id) {
+        $("#re").css("visibility", "hidden");
+        document.getElementById("loader").style.visibility = "visible";
+        //var id = $("#id").val();
+        var name = $("#name").val().toUpperCase();
+        var nascimento = $("#nascimento").val();
+
+        var url = script_url + "?callback=ctrlq&name=" + name +
+          "&nascimento=" + nascimento +
+          "&id=" + id +
+          "&action=insert";
+
+
+        var request = jQuery.ajax({
+          crossDomain: true,
+          url: url,
+          method: "GET",
+          dataType: "jsonp"
+
+        });
+
+      }
+
+      function update_value() {
+
+          $("#re").css("visibility", "hidden");
+          document.getElementById("loader").style.visibility = "visible";
+
+          var id1 = $("#id").val();
+          var name = $("#name1").val();
+          if(!name){
+            window.alert("Digite o Nome!");
+          }else{
+            var nascimento = $("#nascimento1").val();
+            var url = script_url + "?callback=ctrlq&name=" + name +
+              "&nascimento=" + nascimento +
+              "&id=" + id1 + "&action=update";
+
+
+            var request = jQuery.ajax({
+              crossDomain: true,
+              url: url,
+              method: "GET",
+              dataType: "jsonp"
+          });
+        }
+      }
+
+      function delete_value() {
+        $("#re").css("visibility", "hidden");
+        document.getElementById("loader").style.visibility = "visible";
+        $('#mySpinner').addClass('spinner');
+        var id1 = $("#id").val();
+        var name = $("#name").val();
+        var url = script_url + "?callback=ctrlq&name=" + name + "&id=" + id1 + "&action=delete";
+        var request = jQuery.ajax({
+          crossDomain: true,
+          url: url,
+          method: "GET",
+          dataType: "jsonp"
+        });
+
+      }
+      // print the returned data
+      function ctrlq(e) {
+        $("#re").html(e.result);
+        $("#re").css("visibility", "visible");
+        read_value();
+      }
+
+      function read_value(imprimir) { /*imprimir 0 = sim diferente não*/
+        var url = script_url + "?action=read";
+        $.getJSON(url, function(json) {
+              switch(imprimir) {
+                case 1:
+                  var name = $("#name").val().toUpperCase();
+                  if(!name){
+                    window.alert("Digite o Nome!");
+                  }else{
+                      var charName = name.charAt(0);
+                      var n = 1;
+                      for (var i = 0; i < json.records.length; i++){
+                         var teste=json.records[i].ID.toString();
+                         if (teste.search(charName) !=-1)
+                          n++;
+                       }
+                     var id = n++;
+                     id = charName + id.toString();
+                     insert_value(id);
+                   }
+                break;
+                case 0:
+                  var elementoBusca = document.getElementById("busca").value;
+                  if (!elementoBusca) {
+                      $("#re").css("visibility", "visible" );
+                      window.alert("Diga o que buscas...");
+                    }else {
+                      /* Set the variables from the results array
+                        CREATE DYNAMIC TABLE.*/
+                          var table=document.createElement("table");
+                          var header=table.createTHead();
+                          var row=header.insertRow(0);
+                          var cell1=row.insertCell(0);
+                          var cell2=row.insertCell(1);
+                          var cell3=row.insertCell(2);
+                          cell1.innerHTML="<b>Pasta</b>" ;
+                          cell2.innerHTML="<b>Nome</b>" ;
+                          cell3.innerHTML="<b>Nascimento</b>" ; // ADD JSON DATA TO THE TABLE AS ROWS.
+                          for (var i=0; i < json.records.length; i++) { // para imprimir
+                            var tr = table.insertRow(-1);
+                            var test="" ;
+                            var teste=test.concat(json.records[i].ID.toString(), json.records[i].NAME.toString(), json.records[i].NASCIMENTO.toString()).toUpperCase();
+                            if ((teste.search(elementoBusca.toUpperCase()) != -1)) {
+                              var tabCell = tr.insertCell(-1);
+                              tabCell.innerHTML=json.records[i].ID;
+                              tabCell=tr.insertCell(-1);
+                              tabCell.innerHTML=json.records[i].NAME.toUpperCase();
+                              tabCell=tr.insertCell(-1);
+                              tabCell.innerHTML=json.records[i].NASCIMENTO.substring(0, 10);
+                            }
+                          }
+
+                          // FINALLY ADD THE NEWLY CREATED TABLE WITH JSON DATA TO A CONTAINER.
+                          var divContainer=document.getElementById("showData");
+                          divContainer.innerHTML="" ;
+                          divContainer.appendChild(table);
+                      }
+                break;
+            }
+            document.getElementById("loader").style.visibility = "hidden";
+        });
+    }
+    </script> <!-- crud -->
+  </head>
+
+  <body>
+    <div align="center" id="titulo">
+      <h1>E.E.Exemplo</h1>
+      <h2>Arquivo Passivo</h2>
+      <p id="re"></p>
+      <div id="loader"></div>
+    </div>
+    <div align="center" id="Page1">
+      <input type="input" id="busca" /><br><br>
+      <input type="button" onclick="read_value(0)" value="Buscar"></input>
+      <input type="button" onclick="return show('Page2','Page1');" value="Inscrever ou Editar"></input><br>
+      <br>
+      <div id="showData"></div>
+    </div>
+    <div align="center" id="Page2" style="display:none">
+      <form>
+        <br>Nome <input type="text" name="name" id="name" max=30><br><br>
+        Nascimento <input type="date" name="nascimento" id="nascimento" required min="1820-01-01" max="2020-01-01" value="2008-01-01"><br><br>
+        <input type="button" onClick="read_value(1)" value="Inserir Aluno"></input><br><br><br>
+        Para editar:<br>
+        <br>Nome <input type="text" name="name1" id="name1" max=30><br><br>
+        Nascimento <input type="date" name="nascimento1" id="nascimento1" required min="1820-01-01" max="2020-01-01" value="2008-01-01"><br><br>
+        Pasta <input type="text" name="id" id="id"><br><br>
+      </form>
+      <p id="demo"></p>
+      <input type="button" onclick="update_value()" value="Salvar edição"></input>
+      <input type="button" onclick="delete_value()" value="Deletar"></input>
+      <br>
+      <br>
+      <br>
+      <div id="voltar" /><a href="#" onclick="return show('Page1','Page2');">Voltar para Busca</a>
+      <div id="showData"></div>
+    </div>
+  </body>
+
+</html>
