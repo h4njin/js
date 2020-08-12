@@ -88,6 +88,50 @@
     </style>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
     <script>
+      class arquivoPassivo{
+        constructor(pasta){
+          this.pasta = pasta;
+    
+        }
+        function gerarPasta(){
+          //busca nome para a pasta
+
+          let aluno = new aluno( $("#name").val().toUpperCase(),$("#nascimento").val() ); //cria Aluno
+          let pasta = new Pasta(nome, aluno); //cria pasta
+
+        }
+        function excluirPasta(){}
+        function buscar(palavra, campo){
+
+        }
+      }
+
+      class Pasta{
+        contructor(nome, aluno){
+          this.nome = nome;
+          this.aluno = aluno;
+        }
+        get getNome(){return this.nome; }
+        set setNome(novoNome){ this.nome = novoNome; }
+        get getExAluno(){return this.aluno; }
+        set setExAluno(novoExAluno){this.aluno = novoExAluno; }
+      }
+
+      class exAluno{
+        constructor(nome, dataNascimento){
+          this.nome = nome;
+          this.dataNascimento = new Date();
+        }
+        get getNome(){return this.nome;}
+        set setNome(novoNome){ this.nome = novoNome; }
+        get getDataNascimento(){return this.dataNascimento;}
+        set setDataNascimento(novaDataNascimento){this.dataNascimento = novaDataNascimento;}
+      }
+
+
+    </script>
+    <script>
+
       function show(shown, hidden) {
         document.getElementById(shown).style.display = 'block';
         document.getElementById(hidden).style.display = 'none';
@@ -150,6 +194,7 @@
         var id1 = $("#id").val();
         var name = $("#name").val();
         var url = script_url + "?callback=ctrlq&name=" + name + "&id=" + id1 + "&action=delete";
+
         var request = jQuery.ajax({
           crossDomain: true,
           url: url,
