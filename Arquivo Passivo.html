@@ -88,20 +88,30 @@
     </style>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
     <script>
-      class arquivoPassivo{
+      /*class arquivoPassivo{
         constructor(pasta){
           this.pasta = pasta;
-    
         }
-        function gerarPasta(){
-          //busca nome para a pasta
+        function pushData(){ //disponibiliza todos os dados offline
+          let url = script_url + "?action=read";
+          let arquivoPassivo = {};
+          $.getJSON(url, function(json) {
+            for (var i = 0; i < json.records.length; i++){ //hashmap
+                arquivoPassivo[json.records[i].ID]={exAluno(tabCell.innerHTML=json.records[i].NAME,json.records[i].NASCIMENTO)};
+            }
+          });
 
-          let aluno = new aluno( $("#name").val().toUpperCase(),$("#nascimento").val() ); //cria Aluno
-          let pasta = new Pasta(nome, aluno); //cria pasta
+        }
+        function gerarPasta(){ //retorna o nome da pasta
+          let nome = $("#name").val().charAt(0).toUpperCase();
+          this.buscar()
 
         }
         function excluirPasta(){}
         function buscar(palavra, campo){
+
+        }
+        function imprimir(){ //imprime a tablea
 
         }
       }
@@ -127,7 +137,7 @@
         get getDataNascimento(){return this.dataNascimento;}
         set setDataNascimento(novaDataNascimento){this.dataNascimento = novaDataNascimento;}
       }
-
+      */
 
     </script>
     <script>
